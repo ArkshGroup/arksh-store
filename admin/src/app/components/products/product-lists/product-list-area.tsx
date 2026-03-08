@@ -12,6 +12,7 @@ import usePagination from "@/hooks/use-pagination";
 const ProductListArea = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [selectValue, setSelectValue] = useState<string>("");
+  const [itemInfoFilter, setItemInfoFilter] = useState<string>("");
 
   const { data: products, isError, isLoading } = useGetAllProductsQuery();
   const paginationData = usePagination(products?.data || [], 8);
@@ -52,6 +53,10 @@ const ProductListArea = () => {
 
     if (selectValue) {
       productItems = productItems.filter((p) => p.status === selectValue);
+    }
+
+    if (itemInfoFilter) {
+      productItems = productItems.filter((p) => (p.itemInfo ?? "") === itemInfoFilter);
     }
 
     content = (
@@ -102,6 +107,17 @@ const ProductListArea = () => {
             </button>
           </div>
           <div className="flex justify-end space-x-6">
+            <div className="search-select mr-3 flex items-center space-x-3 ">
+              <span className="text-tiny inline-block leading-none -translate-y-[2px]">
+                Display :
+              </span>
+              <select value={itemInfoFilter} onChange={(e) => setItemInfoFilter(e.target.value)}>
+                <option value="">All</option>
+                <option value="top-rated">Top Rated</option>
+                <option value="best-selling">Best Selling</option>
+                <option value="latest-product">Latest Product</option>
+              </select>
+            </div>
             <div className="search-select mr-3 flex items-center space-x-3 ">
               <span className="text-tiny inline-block leading-none -translate-y-[2px]">
                 Status :{" "}

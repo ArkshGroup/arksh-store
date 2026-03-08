@@ -28,6 +28,15 @@ const ProductTableItem = ({ product }: { product: IProduct }) => {
       <td className="px-3 py-3 font-normal text-[#55585B] text-end">
         Rs. {product.originalPrice}
       </td>
+      <td className="px-3 py-3 font-normal text-[#55585B] text-end">
+        {product.itemInfo ? (
+          <span className="text-[11px] px-3 py-1 rounded-md leading-none font-medium bg-themeLight text-theme">
+            {product.itemInfo.replace(/-/g, " ")}
+          </span>
+        ) : (
+          <span className="text-tiny text-gray-400">—</span>
+        )}
+      </td>
       <td className="px-3 py-3 text-end">
         <span
           className={`text-[11px] px-3 py-1 rounded-md leading-none font-medium text-end 

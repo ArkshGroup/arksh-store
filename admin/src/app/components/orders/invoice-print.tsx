@@ -8,16 +8,21 @@ type IPropType = {
 };
 
 const InvoicePrint = ({ orderData }: IPropType) => {
-  const total = orderData.cart.reduce((acc, curr) => acc + curr.price, 0);
-  const grand_total = total + orderData.shippingCost;
+  const subtotal = orderData.cart.reduce(
+    (acc, curr) => acc + (curr.price ?? 0) * (curr.orderQuantity ?? 1),
+    0
+  );
+  const discount = orderData.discount ?? 0;
+  const grand_total =
+    orderData.totalAmount ?? subtotal - discount + orderData.shippingCost;
   return (
     <>
       {/* top bar start */}
       <div className="flex items-center justify-center flex-wrap px-8 mb-6 bg-white border-b border-slate-200 py-6 text-center">
         <div className="relative">
-          <h3 className="font-normal mb-0">ThemePure</h3>
-          <p className="mb-0 text-tiny">Dhaka, Bangladesh</p>
-          <p className="mb-0 text-tiny">0123456789</p>
+          <h3 className="font-normal mb-0">Arksh Store</h3>
+          <p className="mb-0 text-tiny">Arksh Store, Kathmandu, Nepal</p>
+          <p className="mb-0 text-tiny">info@arkshgroup.com</p>
         </div>
       </div>
       {/* top bar end */}
@@ -67,7 +72,7 @@ const InvoicePrint = ({ orderData }: IPropType) => {
                         {p.orderQuantity}
                       </td>
                       <td className="px-3 py-3 font-normal text-[#55585B] text-end">
-                        Rs. {(p.orderQuantity * p.price).toFixed(2)}
+                        Rs. {((p.price ?? 0) * (p.orderQuantity ?? 1)).toFixed(2)}
                       </td>
                     </tr>
                   ))}
@@ -86,7 +91,15 @@ const InvoicePrint = ({ orderData }: IPropType) => {
                       Subtotal
                     </td>
                     <td className="px-3 py-3 pt-6 font-normal text-[#55585B] text-end">
-                      Rs. {total.toFixed(2)}
+                      Rs. {subtotal.toFixed(2)}
+                    </td>
+                  </tr>
+                  <tr className="bg-white border-b border-gray6 last:border-0 text-start mx-9">
+                    <td className="pr-3 py-3 font-normal text-[#55585B] text-start">
+                      Discount
+                    </td>
+                    <td className="px-3 py-3 font-normal text-[#55585B] text-end">
+                      Rs. {discount.toFixed(2)}
                     </td>
                   </tr>
                   <tr className="bg-white border-b border-gray6 last:border-0 text-start mx-9">

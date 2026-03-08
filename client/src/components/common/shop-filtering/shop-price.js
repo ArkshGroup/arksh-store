@@ -3,10 +3,10 @@ import PriceItem from "./price-item";
 
 // price items
 const price_items = [
-  { id: "one", min: 10, max: 49 },
-  { id: "two", min: 50, max: 99 },
-  { id: "three", min: 100, max: 199 },
-  { id: "four", max: 200 },
+  { id: "one", min: 200, max: 500 },
+  { id: "two", min: 500, max: 1000 },
+  { id: "three", min: 1000, max: 2000 },
+  { id: "four", max: 2000 },
 ];
 
 const ShopPrice = () => {

@@ -129,10 +129,19 @@ const OrderTable = () => {
                     )}
                   </td>
                   <td className="px-3 py-3 font-normal text-[#55585B] text-end">
-                    $
-                    {item.cart
-                      .reduce((acc, curr) => acc + curr.price, 0)
-                      .toFixed(2)}
+                    Rs.{" "}
+                    {(
+                      item.totalAmount ??
+                      (((item.subTotal ?? 0) -
+                        (item.discount ?? 0) +
+                        (item.shippingCost ?? 0)) ||
+                        item.cart.reduce(
+                          (acc, curr) =>
+                            acc +
+                            (curr.price ?? 0) * (curr.orderQuantity ?? 1),
+                          0
+                        ))
+                    ).toFixed(2)}
                   </td>
                   <td className="px-3 py-3 text-end">
                     <span

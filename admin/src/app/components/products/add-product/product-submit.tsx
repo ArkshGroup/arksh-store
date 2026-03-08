@@ -89,6 +89,29 @@ const ProductSubmit = () => {
                 register={register}
                 errors={errors}
               />
+              <div className="mb-5">
+                <p className="mb-0 text-base text-black capitalize">Display / Filter</p>
+                <span className="text-tiny leading-4 block mb-2">Show in frontend tabs: Top Rated, Best Selling, Latest Product.</span>
+                <select
+                  {...register("itemInfo")}
+                  className="input w-full h-[44px] rounded-md border border-gray6 px-6 text-base"
+                >
+                  <option value="">None</option>
+                  <option value="top-rated">Top Rated</option>
+                  <option value="best-selling">Best Selling</option>
+                  <option value="latest-product">Latest Product</option>
+                </select>
+              </div>
+              <div className="mb-5">
+                <p className="mb-0 text-base text-black capitalize">Status</p>
+                <select
+                  {...register("status")}
+                  className="input w-full h-[44px] rounded-md border border-gray6 px-6 text-base"
+                >
+                  <option value="active">Active</option>
+                  <option value="inActive">Inactive</option>
+                </select>
+              </div>
             </div>
           </div>
 

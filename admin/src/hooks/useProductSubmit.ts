@@ -64,6 +64,8 @@ const useProductSubmit = () => {
       unit: data.unit,
       quantity: Number(data.quantity),
       colors: colors,
+      itemInfo: data.itemInfo || undefined,
+      status: data.status || "active",
     };
     console.log('productData-------------------..>', productData)
     if (!img) {
@@ -116,6 +118,8 @@ const useProductSubmit = () => {
       unit: data.unit,
       quantity: Number(data.quantity),
       colors: colors,
+      itemInfo: data.itemInfo || undefined,
+      status: data.status || "active",
     };
 
     const res = await editProduct({ id: id, data: productData })

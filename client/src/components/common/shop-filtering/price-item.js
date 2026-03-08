@@ -27,7 +27,7 @@ const PriceItem = ({ id, min, max }) => {
             : false
         }
       />
-      {max < 200 ? (
+      {min ? (
         <label htmlFor={`higher-${id}`}>
           Rs. {min}.00 - Rs. {max}.00
         </label>

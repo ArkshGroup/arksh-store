@@ -10,7 +10,7 @@ import CopyrightText from "./copyright-text";
 function SingleWidget({ col, col_2, col_3, title, contents }) {
   return (
     <div
-      className={`col-xxl-${col} col-xl-${col} col-lg-3 col-md-${col_2} col-sm-6"`}
+      className={`col-xxl-${col} col-xl-${col} col-lg-${col} col-md-${col_2} col-sm-6`}
     >
       <div className={`footer__widget mb-50 footer-col-11-${col_3}`}>
         <h3 className="footer__widget-title">{title}</h3>
@@ -38,8 +38,8 @@ const Footer = () => {
         >
           <div className="footer__top">
             <div className="container">
-              <div className="row">
-                <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-5 col-sm-6">
+              <div className="row g-4">
+                <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6">
                   <div className="footer__widget footer__widget-11 mb-50 footer-col-11-1">
                     <div className="footer__logo">
                       <Link href="/">
@@ -62,35 +62,24 @@ const Footer = () => {
                 </div>
 
                 <SingleWidget
-                  col="2"
-                  col_2="4"
+                  col="3"
+                  col_2="6"
                   col_3="2"
                   title="Company"
                   contents={[
                     { url: "about", title: "About us" },
+                    { url: "blog", title: "Blogs/News" },
+                    { url: "shop", title: "Men's" },
+                    { url: "shop", title: "Women's" },
                     { url: "#", title: "Careers" },
-                    { url: "#", title: "Store Locations" },
-                    { url: "blog", title: "Blog" },
-                    { url: "#", title: "Reviews" },
+
                   ]}
                 />
+              
                 <SingleWidget
                   col="3"
-                  col_2="3"
-                  col_3="3"
-                  title="Shop"
-                  contents={[
-                    { url: "shop", title: "Clothes" },
-                    { url: "shop", title: "Shoes" },
-                    { url: "shop", title: "New Arrivals" },
-                    { url: "shop", title: "Best Sellers" },
-                    { url: "shop", title: "Discounts" },
-                  ]}
-                />
-                <SingleWidget
-                  col="1"
-                  col_2="3"
-                  col_3="4"
+                  col_2="6"
+                  col_3="2"
                   title="Support"
                   contents={[
                     { url: "faq", title: "FAQs" },
@@ -101,7 +90,7 @@ const Footer = () => {
                   ]}
                 />
 
-                <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-5 col-sm-6">
+                <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-6">
                   <div className="footer__widget mb-50 footer-col-11-5">
                     <h3 className="footer__widget-title">Talk To Us</h3>
 

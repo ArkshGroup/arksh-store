@@ -9,6 +9,7 @@ import ProductTypeBrand from "../add-product/product-type-brand";
 import ProductVariants from "../add-product/product-variants";
 import ProductImgUpload from "../add-product/product-img-upload";
 import Tags from "../add-product/tags";
+import Colors from "../add-product/colors";
 import ProductCategory from "../../category/product-category";
 
 const EditProductSubmit = ({ id }: { id: string }) => {
@@ -107,6 +108,31 @@ const EditProductSubmit = ({ id }: { id: string }) => {
                   register={register}
                   errors={errors}
                 />
+                <div className="mb-5">
+                  <p className="mb-0 text-base text-black capitalize">Display</p>
+                 
+                  <select
+                    {...register("itemInfo")}
+                    className="input w-full h-[44px] rounded-md border border-gray6 px-6 text-base"
+                    defaultValue={product.itemInfo ?? ""}
+                  >
+                    <option value="">None</option>
+                    <option value="top-rated">Top Rated</option>
+                    <option value="best-selling">Best Selling</option>
+                    <option value="latest-product">Latest Product</option>
+                  </select>
+                </div>
+                <div className="mb-5">
+                  <p className="mb-0 text-base text-black capitalize">Status</p>
+                  <select
+                    {...register("status")}
+                    className="input w-full h-[44px] rounded-md border border-gray6 px-6 text-base"
+                    defaultValue={product.status ?? "active"}
+                  >
+                    <option value="active">Active</option>
+                    <option value="inActive">Inactive</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -161,6 +187,17 @@ const EditProductSubmit = ({ id }: { id: string }) => {
                   tags={tags}
                   setTags={setTags}
                   default_value={product.tags}
+                />
+              </div>
+            </div>
+
+            <div className="bg-white px-8 py-8 rounded-md mb-6">
+              <p className="mb-5 text-base text-black">Product Colors</p>
+              <div className="grid grid-cols-1 sm:grid-cols-1 gap-3 mb-5">
+                <Colors
+                  colors={colors}
+                  setColors={setColors}
+                  default_value={product.colors ?? []}
                 />
               </div>
             </div>

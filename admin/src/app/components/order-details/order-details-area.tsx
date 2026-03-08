@@ -29,10 +29,12 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
       "Item Price",
       "Amount",
     ];
-    const total = orderData.cart.reduce((acc, curr) => acc + curr.price, 0);
-    const grand_total = (total +
-      orderData.shippingCost +
-      (orderData.discount ?? 0)) as number;
+    const total = orderData.cart.reduce(
+      (acc, curr) => acc + (curr.price ?? 0) * (curr.orderQuantity ?? 1),
+      0
+    );
+    const grand_total =
+      (orderData.totalAmount ?? total - (orderData.discount ?? 0) + orderData.shippingCost) as number;
     content = (
       <>
         <div className="container grid px-6 mx-auto">
@@ -65,7 +67,7 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                     /> */}
                   </h2>
                   <p className="text-base text-gray-500 dark:text-gray-400 mt-2">
-                    Dhaka, Bangladesh
+                    Arksh Store, Kathmandu, Nepal
                   </p>
                 </div>
               </div>
@@ -162,7 +164,7 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                     DISCOUNT
                   </span>
                   <span className="text-base text-gray-500 font-semibold font-heading block">
-                    Rs. {orderData?.discount}
+                    Rs. {(orderData?.discount ?? 0).toFixed(2)}
                   </span>
                 </div>
                 <div className="flex flex-col sm:flex-wrap">

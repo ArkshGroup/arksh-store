@@ -84,7 +84,7 @@ const SingleCoupon = ({ coupon,handleCopied,copiedCode,copied }) => {
                 <div className="product__coupon-info-tooltip transition-3">
                   <p>
                     *This coupon code will apply on{" "}
-                    <span>Grocery type products</span> and when you shopping
+                    <span>{coupon.productType}</span> and when you shopping
                     more than <span>Rs. {coupon.minimumAmount}</span>
                   </p>
                 </div>

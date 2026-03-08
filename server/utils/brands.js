@@ -2,7 +2,7 @@ const brands = [
   {
     _id: "64b7735fae177ed4d70fb5c3",
     logo: "https://i.ibb.co/Ydf3C1H/brand-1.png",
-    name: "Logitech",
+    name: "Arksh",
     description: "Logitech Business Support. Top Articles. Top Articles. Find Your Product. Search for your product by name, model number or part number.",
     email: "logitech@gmail.com",
     website: "logitech.com",
@@ -20,7 +20,7 @@ const brands = [
   {
     _id: "64b7735fae177ed4d70fb5c7",
     logo: "https://i.ibb.co/xqTCvsL/brand-5.png",
-    name: "Deepcool",
+    name: "Suoyuo",
     description: "Deepcool Business Support. Top Articles. Top Articles. Find Your Product. Search for your product by name, model number or part number.",
     email: "deepcool@gmail.com",
     website: "deepcool.com",
@@ -39,7 +39,7 @@ const brands = [
   {
     _id: "64b7735fae177ed4d70fb5c6",
     logo: "https://i.ibb.co/n3Wktzh/brand-4.png",
-    name: "Apple",
+    name: "Nike",
     description: "Apple Business Support. Top Articles. Top Articles. Find Your Product. Search for your product by name, model number or part number.",
     email: "apple@gmail.com",
     website: "apple.com",
@@ -59,7 +59,7 @@ const brands = [
   {
     _id: "64b7735fae177ed4d70fb5c4",
     logo: "https://i.ibb.co/GTzWqnP/brand-2.png",
-    name: "Sony",
+    name: "Levis",
     description: "Sony Business Support. Top Articles. Top Articles. Find Your Product. Search for your product by name, model number or part number.",
     email: "sony@gmail.com",
     website: "sony.com",
@@ -76,7 +76,7 @@ const brands = [
   {
     _id: "64b7735fae177ed4d70fb5c5",
     logo: "https://i.ibb.co/YPzHpCD/brand-3.png",
-    name: "Samsung",
+    name: "Denim",
     description: "Samsung Business Support. Top Articles. Top Articles. Find Your Product. Search for your product by name, model number or part number.",
     email: "samsung@gmail.com",
     website: "samsung.com",
