@@ -11,7 +11,7 @@ import ErrorMessage from "@components/error-message/error";
 import { useGetShowingProductsQuery } from "src/redux/features/productApi";
 import ShopLoader from "@components/loader/shop-loader";
 
-export default function ShopMainArea({ Category, category, brand, priceMin, max, priceMax, color }) {
+export default function ShopMainArea({ Category, category, brand, priceMin, max, priceMax }) {
   const { data: products, isError, isLoading } = useGetShowingProductsQuery();
   const [shortValue,setShortValue] = useState("");
 
@@ -60,11 +60,6 @@ export default function ShopMainArea({ Category, category, brand, priceMin, max,
         (product) =>
           product.brand.name.toLowerCase().replace("&", "").split(" ").join("-") ===
           brand
-      );
-    }
-    if (color) {
-      product_items = product_items.filter((product) =>
-        product.colors.includes(color)
       );
     }
     if (priceMin || max || priceMax) {

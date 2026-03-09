@@ -10,6 +10,7 @@ import ProductDetailsCategories from "./product-details-categories";
 import ProductDetailsTags from "./product-details-tags";
 import { add_cart_product } from "src/redux/features/cartSlice";
 import { add_to_wishlist } from "src/redux/features/wishlist-slice";
+import { notifyError } from "@utils/toast";
 
 const ProductDetailsArea = ({ product }) => {
   const {
@@ -22,7 +23,13 @@ const ProductDetailsArea = ({ product }) => {
     discount,
     tags,
     sku,
+    colors: availableColors = [],
+    sizes: availableSizes = [],
   } = product || {};
+
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
+
   const [activeImg, setActiveImg] = useState(image);
   useEffect(() => {
     setActiveImg(image);
@@ -34,7 +41,22 @@ const ProductDetailsArea = ({ product }) => {
 
   // handle add product
   const handleAddProduct = (prd) => {
-    dispatch(add_cart_product(prd));
+    if (availableColors.length > 0 && !selectedColor) {
+      notifyError("Please choose a color before adding to cart.");
+      return;
+    }
+    if (availableSizes.length > 0 && !selectedSize) {
+      notifyError("Please choose a size before adding to cart.");
+      return;
+    }
+
+    const payload = {
+      ...prd,
+      selectedColor: selectedColor || null,
+      selectedSize: selectedSize || null,
+    };
+
+    dispatch(add_cart_product(payload));
   };
 
   // handle add wishlist
@@ -58,7 +80,7 @@ const ProductDetailsArea = ({ product }) => {
                     style={{
                       width: "100%",
                       maxHeight: "575px",
-                      objectFit: "cover",
+                      objectFit: "contain",
                     }}
                   />
                 </div>
@@ -87,14 +109,53 @@ const ProductDetailsArea = ({ product }) => {
               </div>
               <h3 className="product__details-title">{title}</h3>
 
-              <p className="mt-20">
-                Shop arkshstore.com for every day low prices. Free shipping on orders
-                Rs. 35+ or Pickup In-store and get
-              </p>
-
               {/* Product Details Price */}
               <ProductDetailsPrice price={originalPrice} discount={discount} />
               {/* Product Details Price */}
+
+              {/* Color & Size selectors (top) */}
+              {(availableColors.length > 0 || availableSizes.length > 0) && (
+                <div className="mt-15 mb-15">
+                  {availableColors.length > 0 && (
+                    <div className="product__details-tags product__details-more mb-2">
+                      <span>Colors:</span>
+                      {availableColors.map((c, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => setSelectedColor(c)}
+                          className={`ms-2 mb-1 px-3 py-1 border rounded-1 text-sm ${
+                            selectedColor === c
+                              ? "bg-dark text-white"
+                              : "bg-gray-100 text-body"
+                          }`}
+                        >
+                          {c}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {availableSizes.length > 0 && (
+                    <div className="product__details-tags product__details-more">
+                      <span>Sizes:</span>
+                      {availableSizes.map((s, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => setSelectedSize(s)}
+                          className={`ms-2 mb-1 px-3 py-1 border rounded-1 text-sm ${
+                            selectedSize === s
+                              ? "bg-dark text-white"
+                              : "bg-gray-100 text-body"
+                          }`}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* quantity */}
               <ProductQuantity />
@@ -129,10 +190,8 @@ const ProductDetailsArea = ({ product }) => {
               {/* ProductDetailsCategories */}
               <ProductDetailsCategories name={product?.category?.name} />
               {/* ProductDetailsCategories */}
-
               {/* Tags */}
               <ProductDetailsTags tag={tags} />
-              {/* Tags */}
 
               <div className="product__details-share">
                 <span>Share:</span>

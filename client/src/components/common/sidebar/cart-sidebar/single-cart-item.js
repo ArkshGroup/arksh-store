@@ -5,8 +5,16 @@ import Link from "next/link";
 import { remove_product } from "src/redux/features/cartSlice";
 
 const SingleCartItem = ({ item }) => {
-  const { _id, image, originalPrice, title, orderQuantity, discount } =
-    item || {};
+  const {
+    _id,
+    image,
+    originalPrice,
+    title,
+    orderQuantity,
+    discount,
+    selectedColor,
+    selectedSize,
+  } = item || {};
   const dispatch = useDispatch();
 
   // handle remove cart
@@ -26,15 +34,25 @@ const SingleCartItem = ({ item }) => {
         <h5>
           <a href={`/product-details/${_id}`}>{title}</a>
         </h5>
+        {(selectedColor || selectedSize) && (
+          <div className="cartmini__meta text-xs text-gray-500 mb-1">
+            {selectedColor && <span>Color: {selectedColor}</span>}
+            {selectedColor && selectedSize && <span>&nbsp;|&nbsp;</span>}
+            {selectedSize && <span>Size: {selectedSize}</span>}
+          </div>
+        )}
         <div className="cartmini__price-wrapper">
-          {!discount && (
-            <span className="cartmini__price">Rs. {originalPrice}</span>
-          )}
-          {discount > 0 && (
+          {discount > 0 ? (
             <span className="cartmini__price">
-              $
-              {(originalPrice - (originalPrice * discount) / 100) *
-                orderQuantity}
+              Rs.{" "}
+              {(
+                (originalPrice - (originalPrice * discount) / 100) *
+                orderQuantity
+              ).toFixed(2)}
+            </span>
+          ) : (
+            <span className="cartmini__price">
+              Rs. {(originalPrice * orderQuantity).toFixed(2)}
             </span>
           )}
           <span className="cartmini__quantity">x{orderQuantity}</span>

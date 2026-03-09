@@ -7,7 +7,16 @@ import {Minus,Plus} from "@svg/index";
 import { add_cart_product, quantityDecrement, remove_product } from "src/redux/features/cartSlice";
 
 const SingleCartItem = ({item}) => {
-  const {_id,image,title,originalPrice,orderQuantity=0} = item || {};
+  const {
+    _id,
+    image,
+    title,
+    originalPrice,
+    orderQuantity = 0,
+    discount = 0,
+    selectedColor,
+    selectedSize,
+  } = item || {};
   const dispatch = useDispatch()
 
   // handle add product
@@ -36,9 +45,23 @@ const SingleCartItem = ({item}) => {
       </td>
       <td className="product-name">
         <Link href={`product-details/${_id}`}>{title}</Link>
+        {(selectedColor || selectedSize) && (
+          <div className="cart-item-meta text-xs text-gray-500 mt-1">
+            {selectedColor && <span >Color: {selectedColor}</span>}
+            {selectedColor && selectedSize && <span> | </span>}
+            {selectedSize && <span >Size: {selectedSize}</span>}
+          </div>
+        )}
       </td>
       <td className="product-price">
-        <span className="amount">Rs. {originalPrice}</span>
+        <span className="amount">
+          Rs.{" "}
+          {(
+            discount > 0
+              ? originalPrice - (originalPrice * discount) / 100
+              : originalPrice
+          ).toFixed(2)}
+        </span>
       </td>
       <td className="product-quantity">
         <div className="tp-product-quantity mt-10 mb-10">
@@ -52,7 +75,14 @@ const SingleCartItem = ({item}) => {
         </div>
       </td>
       <td className="product-subtotal">
-        <span className="amount">Rs. {(originalPrice * orderQuantity).toFixed(2)}</span>
+        <span className="amount">
+          Rs.{" "}
+          {(
+            (discount > 0
+              ? originalPrice - (originalPrice * discount) / 100
+              : originalPrice) * orderQuantity
+          ).toFixed(2)}
+        </span>
       </td>
       <td className="product-remove">
         <button type="submit" onClick={()=> handleRemovePrd(item)}>

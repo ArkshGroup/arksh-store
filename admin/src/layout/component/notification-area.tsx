@@ -14,6 +14,8 @@ type IPropType = {
 
 const NotificationArea = ({nRef,notificationOpen,handleNotificationOpen}: IPropType) => {
   const {data: allOrders,isError,isLoading} = useGetAllOrdersQuery();
+  const totalOrders = allOrders?.data?.length ?? 0;
+  const displayCount = totalOrders > 9 ? "9+" : totalOrders;
 
   return (
     <div ref={nRef}>
@@ -22,9 +24,11 @@ const NotificationArea = ({nRef,notificationOpen,handleNotificationOpen}: IPropT
         className="relative w-[40px] h-[40px] leading-[40px] rounded-md text-gray border border-gray hover:bg-themeLight hover:text-theme hover:border-themeLight"
       >
         <Notification />
-        <span className="w-[20px] h-[20px] inline-block bg-danger rounded-full absolute -top-[4px] -right-[4px] border-[2px] border-white text-xs leading-[18px] font-medium text-white">
-          {allOrders?.data && allOrders?.data.slice(0,4).length}
-        </span>
+        {totalOrders > 0 && (
+          <span className="min-w-[20px] h-[20px] inline-flex items-center justify-center px-1 bg-danger rounded-full absolute -top-[4px] -right-[4px] border-[2px] border-white shadow-sm text-[11px] leading-[14px] font-medium text-white">
+            {displayCount}
+          </span>
+        )}
       </button>
 
       {notificationOpen && (

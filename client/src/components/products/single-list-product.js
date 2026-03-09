@@ -61,10 +61,7 @@ const SingleListProduct = ({ product }) => {
               <div className="product__list-price">
                 <span className="product__list-ammount">Rs. {price}</span>
               </div>
-              <p>
-                Shop Harry.com for every day low prices. Free shipping on orders
-                Rs. 35+ or Pickup In-store and get
-              </p>
+            
 
               <div className="product__list-action d-flex flex-wrap align-items-center">
                 <button

@@ -11,6 +11,7 @@ import {
   Setting,
   Leaf,
   StuffUser,
+  Customers,
 } from "@/svg";
 
 const sidebar_menu: Array<ISidebarMenus> = [
@@ -69,7 +70,7 @@ const sidebar_menu: Array<ISidebarMenus> = [
   },
   {
     id: 63,
-    icon: Pages,
+    icon: Customers,
     link: "/contacts",
     title: "Contacts",
   },
@@ -82,8 +83,8 @@ const sidebar_menu: Array<ISidebarMenus> = [
   {
     id: 7,
     icon: Profile,
-    link: "/profile",
-    title: "Profile",
+    link: "/users",
+    title: "Customers",
   },
   {
     id: 8,

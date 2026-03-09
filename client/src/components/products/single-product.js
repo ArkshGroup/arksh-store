@@ -8,7 +8,6 @@ import { RatingFull, RatingHalf } from "./rating";
 import ProductModal from "@components/common/modals/product-modal";
 import OldNewPrice from "./old-new-price";
 import {
-  add_cart_product,
   initialOrderQuantity,
 } from "src/redux/features/cartSlice";
 import { add_to_wishlist } from "src/redux/features/wishlist-slice";
@@ -22,10 +21,6 @@ const SingleProduct = ({ product, discountPrd = false }) => {
   const isWishlistAdded = wishlist.some(item => item._id === _id);
   const isAddedToCart = cart_products.some((prd) => prd._id === _id);
 
-  // handle add product
-  const handleAddProduct = (prd) => {
-    dispatch(add_cart_product(prd));
-  };
   // handle add wishlist
   const handleAddWishlist = (prd) => {
     dispatch(add_to_wishlist(prd));
@@ -103,14 +98,13 @@ const SingleProduct = ({ product, discountPrd = false }) => {
                 View Cart
               </Link>
             ) : (
-              <button
-                onClick={() => handleAddProduct(product)}
-                type="button"
-                className="product-add-cart-btn w-100"
+              <Link
+                href={`/product-details/${_id}`}
+                className="product-add-cart-btn w-100 d-flex align-items-center justify-content-center"
               >
                 <CartTwo />
                 Add to Cart
-              </button>
+              </Link>
             )}
           </div>
         </div>

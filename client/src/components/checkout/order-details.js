@@ -36,10 +36,10 @@ const OrderDetails = ({
                 name="shippingOption"
               />
               <label
-                onClick={() => handleShippingCost(60)}
+                onClick={() => handleShippingCost(200)}
                 htmlFor="flat_shipping"
               >
-                <span className="amount">Delivery: Today Cost : Rs. 60.00</span>
+                <span className="amount">Delivery:Out of Valley : Rs. 200.00</span>
               </label>
               <ErrorMessage message={errors?.shippingOption?.message} />
             </li>
@@ -54,10 +54,10 @@ const OrderDetails = ({
                 name="shippingOption"
               />
               <label
-                onClick={() => handleShippingCost(20)}
+                onClick={() => handleShippingCost(100)}
                 htmlFor="free_shipping"
               >
-                Delivery: 7 Days Cost : Rs. 20.00
+                Delivery: In Valley : Rs. 100.00
               </label>
               <ErrorMessage message={errors?.shippingOption?.message} />
             </li>
@@ -84,7 +84,7 @@ const OrderDetails = ({
       </tr>
 
       <tr className="shipping">
-        <th>Discount</th>
+        <th>Coupon Discount</th>
         <td className="text-end">
           <strong>
             <span className="amount">Rs. {discountAmount.toFixed(2)}</span>

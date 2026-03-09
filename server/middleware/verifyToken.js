@@ -29,10 +29,16 @@ module.exports = async (req, res, next) => {
 
 
   } catch (error) {
-    console.log(error)
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({
+        status: "fail",
+        error: "Token expired. Please log in again.",
+        code: "TOKEN_EXPIRED",
+      });
+    }
     res.status(403).json({
       status: "fail",
-      error: "Invalid token"
+      error: "Invalid token",
     });
   }
 };

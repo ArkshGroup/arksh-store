@@ -64,6 +64,8 @@ export default function InvoiceArea({innerRef,info}) {
             <Tr>
               <Th scope="col">SL</Th>
               <Th scope="col">Product Name</Th>
+              <Th scope="col">Color</Th>
+              <Th scope="col">Size</Th>
               <Th scope="col">Quantity</Th>
               <Th scope="col">Item Price</Th>
               <Th scope="col">Amount</Th>
@@ -73,22 +75,31 @@ export default function InvoiceArea({innerRef,info}) {
             {cart.map((item, i) => (
               <Tr key={i}>
                 <Td>{i + 1}</Td>
-                <Td>{item.title}</Td>
+                <Td>
+                  {item.title}
+                 
+                </Td>
+                <Td>{item.selectedColor}</Td>
+                <Td>{item.selectedSize}</Td>
                 <Td>{item.orderQuantity}</Td>
                 <Td>
                   Rs.{" "}
                   {item?.discount
-                    ? item.originalPrice -
-                      (item.originalPrice * item.discount) / 100
-                    : item.originalPrice}
+                    ? (
+                        item.originalPrice -
+                        (item.originalPrice * item.discount) / 100
+                      ).toFixed(2)
+                    : item.originalPrice.toFixed(2)}
                 </Td>
                 <Td>
                   Rs.{" "}
                   {item?.discount
-                    ? (item.originalPrice -
-                        (item.originalPrice * item.discount) / 100) *
-                      item.orderQuantity
-                    : item.originalPrice * item.orderQuantity}
+                    ? (
+                        (item.originalPrice -
+                          (item.originalPrice * item.discount) / 100) *
+                        item.orderQuantity
+                      ).toFixed(2)
+                    : (item.originalPrice * item.orderQuantity).toFixed(2)}
                 </Td>
               </Tr>
             ))}
@@ -113,7 +124,7 @@ export default function InvoiceArea({innerRef,info}) {
           </div>
           <div className="col-lg-3 col-md-4">
             <div className="invoice__discount-cost mb-30">
-              <h5 className="mb-0">Discount</h5>
+              <h5 className="mb-0">Coupon Discount</h5>
               <p className="tp-font-medium">Rs. {discount.toFixed(2)}</p>
             </div>
           </div>

@@ -27,7 +27,7 @@ const BillingDetails = ({ register, errors }) => {
           )}
           <input
             {...register(`${name}`, {
-              required: `${label} is required!`,
+              required: isRequired ? `${label} is required!` : false,
             })}
             type={type}
             placeholder={placeholder}
@@ -88,6 +88,7 @@ const BillingDetails = ({ register, errors }) => {
           label="Postcode / Zip"
           placeholder="Postcode / Zip"
           name="zipCode"
+          isRequired={false}
           register={register}
           error={errors?.zipCode?.message}
         />

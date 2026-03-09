@@ -8,7 +8,7 @@ import SocialLinks from "@components/social";
 import OldNewPrice from "@components/products/old-new-price";
 import Quantity from "@components/products/quantity";
 import ProductCategories from "@components/products/product-categories";
-import ProductTags from "@components/products/product-tags";
+import ProductDetailsTags from "@components/product-details/product-details-tags";
 import { add_cart_product, initialOrderQuantity } from "src/redux/features/cartSlice";
 import Link from "next/link";
 import { add_to_wishlist } from "src/redux/features/wishlist-slice";
@@ -18,7 +18,7 @@ import { handleModalShow } from "src/redux/features/productSlice";
 const ProductModal = () => {
   const { product, isShow } = useSelector((state) => state.product);
   const { wishlist } = useSelector((state) => state.wishlist);
-  const { _id, image, relatedImages, title, tags, SKU, price, discount, originalPrice, sku } = product || {};
+  const { _id, image, relatedImages, title, tags, SKU, price, discount, originalPrice, sku, colors, sizes } = product || {};
   const [activeImg, setActiveImg] = useState(image);
   const dispatch = useDispatch();
   const isWishlistAdded = wishlist.some((item) => item._id === _id);
@@ -106,16 +106,20 @@ const ProductModal = () => {
           <div className="col-lg-6">
             <div className="product__details-wrapper">
               <h3 className="product__details-title">{title}</h3>
-              <p className="mt-20">
-                Shop arkshstore.com for every day low prices. Free shipping on
-                orders Rs. 35+ or Pickup In-store and get
-              </p>
+             
               {/* Price */}
               <OldNewPrice
                 originalPrice={originalPrice}
                 discount={discount}
               />
               {/* Price */}
+
+              {/* Tags, Colors, Sizes */}
+              <ProductDetailsTags
+                tag={tags}
+                colors={colors}
+                sizes={sizes}
+              />
 
               {/* quantity */}
               <Quantity />
@@ -157,9 +161,6 @@ const ProductModal = () => {
               <ProductCategories />
               {/* Product Categories */}
 
-              {/* Tags */}
-              <ProductTags tag={tags} />
-              {/* Tags */}
               <div className="product__details-share">
                 <span>Share:</span>
                 <SocialLinks />

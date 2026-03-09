@@ -19,7 +19,9 @@ router.patch('/forget-password', userController.forgetPassword);
 router.patch('/confirm-forget-password', userController.confirmForgetPassword);
 // change password
 router.patch('/change-password', userController.changePassword);
-// change password
+// update profile
 router.put('/update-user/:id', userController.updateUser);
+// get all users (admin)
+router.get('/all', userController.getAllUsers);
 
 module.exports = router;

@@ -19,8 +19,8 @@ import {
 
 const useCheckoutSubmit = () => {
   const { data: offerCoupons, isError, isLoading } = useGetOfferCouponsQuery();
-  const [addOrder, {}] = useAddOrderMutation();
-  const [createPaymentIntent, {}] = useCreatePaymentIntentMutation();
+  const [addOrder] = useAddOrderMutation();
+  const [createPaymentIntent] = useCreatePaymentIntentMutation();
   const { cart_products } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
   const { shipping_info } = useSelector((state) => state.order);
@@ -36,6 +36,33 @@ const useCheckoutSubmit = () => {
   const [cardError, setCardError] = useState("");
   const [clientSecret, setClientSecret] = useState("");
   
+  // simple per-user coupon usage tracking in localStorage (client-side only)
+  const getUsedCoupons = () => {
+    if (typeof window === "undefined") return {};
+    try {
+      const raw = localStorage.getItem("usedCoupons");
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
+  };
+
+  const hasUserUsedCoupon = (userId, code) => {
+    if (!userId || !code) return false;
+    const used = getUsedCoupons();
+    return Array.isArray(used[userId]) && used[userId].includes(code);
+  };
+
+  const markCouponUsed = (userId, code) => {
+    if (typeof window === "undefined" || !userId || !code) return;
+    const used = getUsedCoupons();
+    const list = Array.isArray(used[userId]) ? used[userId] : [];
+    if (!list.includes(code)) {
+      used[userId] = [...list, code];
+      localStorage.setItem("usedCoupons", JSON.stringify(used));
+    }
+  };
+
   const dispatch = useDispatch();
   const router = useRouter();
   const stripe = useStripe();
@@ -50,16 +77,8 @@ const useCheckoutSubmit = () => {
 
   const couponRef = useRef("");
 
-  useEffect(() => {
-    if (localStorage.getItem("couponInfo")) {
-      const data = localStorage.getItem("couponInfo");
-      const coupon = JSON.parse(data);
-      setCouponInfo(coupon);
-      setDiscountPercentage(coupon.discountPercentage);
-      setMinimumAmount(coupon.minimumAmount);
-      setDiscountProductType(coupon.productType);
-    }
-  }, []);
+  // On first load, do not auto-apply any stored coupon.
+  // User must explicitly enter and apply a coupon code on each checkout.
 
   useEffect(() => {
     if (minimumAmount - discountAmount > total || cart_products.length === 0) {
@@ -70,18 +89,39 @@ const useCheckoutSubmit = () => {
 
   //calculate total and discount value
   useEffect(() => {
-    const result = cart_products?.filter((p) => p.type === discountProductType);
-    const discountProductTotal = result?.reduce(
-      (preValue, currentValue) =>
-        preValue + currentValue.originalPrice * currentValue.orderQuantity,
-      0
-    );
-    let totalValue = "";
-    let subTotal = Number((total + shippingCost).toFixed(2));
-    let discountTotal = Number(
+    // if no active coupon, no discount
+    if (!discountPercentage || discountPercentage <= 0) {
+      const subTotal = Number((total + shippingCost).toFixed(2));
+      setDiscountAmount(0);
+      setCartTotal(subTotal);
+      return;
+    }
+
+    const result = cart_products?.filter((p) => {
+      if (!discountProductType) return true;
+      return (
+        p.type === discountProductType ||
+        p.parent === discountProductType ||
+        p?.category?.name === discountProductType
+      );
+    });
+
+    const discountProductTotal =
+      result && result.length > 0
+        ? result.reduce(
+            (preValue, currentValue) =>
+              preValue +
+              Number(currentValue.originalPrice || 0) *
+                Number(currentValue.orderQuantity || 0),
+            0
+          )
+        : 0;
+
+    const subTotal = Number((total + shippingCost).toFixed(2));
+    const discountTotal = Number(
       discountProductTotal * (discountPercentage / 100)
     );
-    totalValue = Number(subTotal - discountTotal);
+    const totalValue = Number(subTotal - discountTotal);
     setDiscountAmount(discountTotal);
     setCartTotal(totalValue);
   }, [
@@ -118,6 +158,9 @@ const useCheckoutSubmit = () => {
       notifyError("Please Input a Coupon Code!");
       return;
     }
+
+    const code = couponRef.current?.value;
+    const userId = user?._id;
     if (isLoading) {
       return <Loader loading={isLoading} />;
     }
@@ -144,6 +187,33 @@ const useCheckoutSubmit = () => {
       );
       return;
     } else {
+      // check if coupon actually applies to any cart items first
+      const appliedProductType = result[0].productType;
+      const applicableItems = cart_products?.filter((p) => {
+        return (
+          p.type === appliedProductType ||
+          p.parent === appliedProductType ||
+          p?.category?.name === appliedProductType
+        );
+      });
+
+      if (!applicableItems || applicableItems.length === 0) {
+        notifyError(
+          `This coupon can be applied only to ${appliedProductType} products.`
+        );
+        setDiscountPercentage(0);
+        setDiscountProductType("");
+        setMinimumAmount(0);
+        localStorage.removeItem("couponInfo");
+        return;
+      }
+
+      // now enforce one-time use per user for applicable coupons
+      if (userId && hasUserUsedCoupon(userId, code)) {
+        notifyError("You have already used this coupon on a previous order.");
+        return;
+      }
+
       notifySuccess(
         `Your Coupon ${result[0].title} is Applied on ${result[0].productType}!`
       );
@@ -151,6 +221,11 @@ const useCheckoutSubmit = () => {
       setDiscountProductType(result[0].productType);
       setDiscountPercentage(result[0].discountPercentage);
       dispatch(set_coupon(result[0]));
+      localStorage.setItem("couponInfo", JSON.stringify(result[0]));
+
+      if (userId && code) {
+        markCouponUsed(userId, code);
+      }
     }
   };
 
@@ -191,6 +266,7 @@ const useCheckoutSubmit = () => {
       subTotal: total,
       shippingCost: shippingCost,
       discount: discountAmount,
+      couponCode: discountPercentage > 0 ? couponRef.current?.value || null : null,
       totalAmount: cartTotal,
       user:`${user?._id}`
     };
@@ -247,18 +323,14 @@ const useCheckoutSubmit = () => {
 
       addOrder({
         ...orderData,
-      })
-      .then((result) => {
-          if(result?.error){
-
-          }
-          else {
-            router.push(`/order/${result.data?.order?._id}`);
-            notifySuccess("Your Order Confirmed!");
-          }
-          if(result.data?.success){
-          }
-        })
+      }).then((result) => {
+        if (result?.error) {
+          notifyError("Failed to place order. Please try again.");
+        } else {
+          router.push(`/order/${result.data?.order?._id}`);
+          notifySuccess("Your Order Confirmed!");
+        }
+      });
     } catch (err) {
       console.log(err);
     }
@@ -284,7 +356,6 @@ const useCheckoutSubmit = () => {
     clientSecret,
     setClientSecret,
     cartTotal,
-    isCheckoutSubmit,
   };
 };
 

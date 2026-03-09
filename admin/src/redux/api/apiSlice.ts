@@ -46,5 +46,6 @@ export const apiSlice = createApi({
     "AllReviews",
     "Review",
     "AllSubscribers",
+    "AllUsers",
   ],
 });

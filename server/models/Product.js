@@ -85,8 +85,32 @@ const productSchema = mongoose.Schema({
     required: true,
   },
   colors:[String],
+  sizes: [String],
   type:String,
   itemInfo:String,
+  // SEO fields
+  metaTitle: {
+    type: String,
+    trim: true,
+    default: "",
+  },
+  metaDescription: {
+    type: String,
+    trim: true,
+    maxlength: 160,
+    default: "",
+  },
+  metaKeywords: [
+    {
+      type: String,
+      trim: true,
+    },
+  ],
+  slug: {
+    type: String,
+    trim: true,
+    default: "",
+  },
   status: {
     type: String,
     default: 'active',

@@ -31,12 +31,7 @@ const OrderArea = ({
           </thead>
           <tbody>
             {cart_products?.map((item, i) => (
-              <OrderSingleCartItem
-                key={i}
-                title={item.title}
-                quantity={item.quantity}
-                price={item.originalPrice}
-              />
+              <OrderSingleCartItem key={i} item={item} />
             ))}
           </tbody>
           <tfoot>

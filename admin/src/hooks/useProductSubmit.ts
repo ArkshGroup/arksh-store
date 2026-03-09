@@ -21,6 +21,7 @@ const useProductSubmit = () => {
   const [children, setChildren] = useState<string>('');
   const [tags, setTags] = useState<string[]>([]);
   const [colors, setColors] = useState<string[]>([]);
+  const [sizes, setSizes] = useState<string[]>([]);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(true);
 
   const router = useRouter();
@@ -47,6 +48,13 @@ const useProductSubmit = () => {
   const handleSubmitProduct = async (data: any) => {
     console.log('data', data)
     // product data
+    const metaKeywordsArray: string[] = data.metaKeywords
+      ? String(data.metaKeywords)
+          .split(",")
+          .map((k: string) => k.trim())
+          .filter(Boolean)
+      : [];
+
     const productData: IAddProduct = {
       sku: data.sku,
       title: data.title,
@@ -64,7 +72,12 @@ const useProductSubmit = () => {
       unit: data.unit,
       quantity: Number(data.quantity),
       colors: colors,
+      sizes: sizes,
       itemInfo: data.itemInfo || undefined,
+      metaTitle: data.metaTitle || data.title,
+      metaDescription: data.metaDescription || data.description,
+      metaKeywords: metaKeywordsArray,
+      slug: slugify(data.title, { lower: true, strict: true }),
       status: data.status || "active",
     };
     console.log('productData-------------------..>', productData)
@@ -101,6 +114,13 @@ const useProductSubmit = () => {
   // handle edit product
   const handleEditProduct = async (data: any, id: string) => {
     // product data
+    const metaKeywordsArray: string[] = data.metaKeywords
+      ? String(data.metaKeywords)
+          .split(",")
+          .map((k: string) => k.trim())
+          .filter(Boolean)
+      : [];
+
     const productData: IAddProduct = {
       sku: data.sku,
       title: data.title,
@@ -118,7 +138,12 @@ const useProductSubmit = () => {
       unit: data.unit,
       quantity: Number(data.quantity),
       colors: colors,
+      sizes: sizes,
       itemInfo: data.itemInfo || undefined,
+      metaTitle: data.metaTitle || data.title,
+      metaDescription: data.metaDescription || data.description,
+      metaKeywords: metaKeywordsArray,
+      slug: slugify(data.title, { lower: true, strict: true }),
       status: data.status || "active",
     };
 
@@ -156,15 +181,18 @@ const useProductSubmit = () => {
     handleSubmit,
     errors,
     control,
+    setValue,
     setParent,
     setChildren,
     setTags,
     setColors,
+    setSizes,
     setRelatedImages,
     tags,
     isSubmitted,
     relatedImages,
     colors,
+    sizes,
   };
 };
 

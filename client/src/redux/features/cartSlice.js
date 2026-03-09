@@ -16,7 +16,7 @@ export const cartSlice = createSlice({
       if (!isExist) {
         const newItem = {
           ...payload,
-          orderQuantity: 1,
+          orderQuantity: state.orderQuantity || 1,
         };
         state.cart_products.push(newItem);
         notifySuccess(`${payload.title} added to cart`);

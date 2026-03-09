@@ -14,7 +14,7 @@ import ErrorMessage from "@components/error-message/error";
 const schema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
   email: Yup.string().required().email().label("Email"),
-  phone: Yup.string().required().min(11).label("Phone"),
+  phone: Yup.string().required().min(10).label("Phone"),
   address: Yup.string().required().label("Address"),
   bio: Yup.string().required().min(20).label("Bio"),
 });

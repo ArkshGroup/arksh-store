@@ -1,16 +1,23 @@
 "use client";
 import React from "react";
+import dynamic from "next/dynamic";
+import { Controller } from "react-hook-form";
 import useProductSubmit from "@/hooks/useProductSubmit";
-import DescriptionTextarea from "./description-textarea";
+import ErrorMsg from "../../common/error-msg";
 import OfferDatePicker from "./offer-date-picker";
 import ProductTypeBrand from "./product-type-brand";
-import AdditionalInformation from "./additional-information";
 import ProductVariants from "./product-variants";
 import ProductImgUpload from "./product-img-upload";
 import ProductCategory from "../../category/product-category";
 import Tags from "./tags";
 import FormField from "../form-field";
 import Colors from "./colors";
+import Sizes from "./sizes";
+
+const BlogLexicalEditor = dynamic(
+  () => import("@/app/components/blog/BlogLexicalEditor"),
+  { ssr: false }
+);
 
 const ProductSubmit = () => {
   const {
@@ -31,7 +38,9 @@ const ProductSubmit = () => {
     relatedImages,
     setRelatedImages,
     setColors,
+    setSizes,
     colors,
+    sizes,
   } = useProductSubmit();
 
   console.log('related image',relatedImages)
@@ -49,7 +58,25 @@ const ProductSubmit = () => {
               register={register}
               errors={errors}
             />
-            <DescriptionTextarea register={register} errors={errors} />
+            <div className="mb-5">
+              <p className="mb-0 text-base text-black">Description</p>
+              <p className="text-tiny text-gray-500 mb-2">
+                Use the toolbar for headings (H1, H2, H3), paragraphs, bold, italic, and lists.
+              </p>
+              <Controller
+                name="description"
+                control={control}
+                rules={{ required: "Description is required!" }}
+                render={({ field }) => (
+                  <BlogLexicalEditor
+                    value={field.value ?? ""}
+                    onChange={field.onChange}
+                    placeholder="Write product description…"
+                  />
+                )}
+              />
+              <ErrorMsg msg={(errors?.description?.message as string) || ""} />
+            </div>
           </div>
 
           <div className="bg-white px-8 py-8 rounded-md mb-6">
@@ -84,14 +111,14 @@ const ProductSubmit = () => {
                 title="discount"
                 type="number"
                 isRequired={false}
-                placeHolder="Discount"
+                placeHolder=" Discount"
                 bottomTitle="Set the Discount Percentage."
                 register={register}
                 errors={errors}
               />
               <div className="mb-5">
-                <p className="mb-0 text-base text-black capitalize">Display / Filter</p>
-                <span className="text-tiny leading-4 block mb-2">Show in frontend tabs: Top Rated, Best Selling, Latest Product.</span>
+                <p className="mb-0 text-base text-black capitalize">Display </p>
+                
                 <select
                   {...register("itemInfo")}
                   className="input w-full h-[44px] rounded-md border border-gray6 px-6 text-base"
@@ -111,6 +138,41 @@ const ProductSubmit = () => {
                   <option value="active">Active</option>
                   <option value="inActive">Inactive</option>
                 </select>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white px-8 py-8 rounded-md mb-6">
+            <h4 className="text-[18px] mb-4">SEO (Search Engine Optimization)</h4>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-x-6">
+              <FormField
+                title="metaTitle"
+                isRequired={false}
+                placeHolder="Custom SEO title (optional)"
+                bottomTitle="Defaults to the product title if empty."
+                register={register}
+                errors={errors}
+              />
+              <div className="mb-5 sm:col-span-2 2xl:col-span-2">
+                <p className="mb-0 text-base text-black">Meta Description</p>
+               
+                <textarea
+                  {...register("metaDescription")}
+                  className="input w-full min-h-[80px] rounded-md border border-gray6 px-4 py-2 text-base"
+                  maxLength={160}
+                  placeholder=" Short summary  (max 160 characters)…"
+                />
+                <ErrorMsg msg={(errors?.metaDescription?.message as string) || ""} />
+              </div>
+              <div className="mb-5 sm:col-span-2 2xl:col-span-3">
+                <p className="mb-0 text-base text-black">Meta Keywords</p>
+                
+                <input
+                  {...register("metaKeywords")}
+                  type="text"
+                  className="input w-full h-[44px] rounded-md border border-gray6 px-4 text-base"
+                  placeholder="keyword1, keyword2, keyword3"
+                />
               </div>
             </div>
           </div>
@@ -163,9 +225,15 @@ const ProductSubmit = () => {
 
           <div className="bg-white px-8 py-8 rounded-md mb-6">
             <p className="mb-5 text-base text-black">Product Colors</p>
-            {/* tags start */}
             <div className="grid grid-cols-1 sm:grid-cols-1 gap-3 mb-5">
               <Colors colors={colors} setColors={setColors} />
+            </div>
+          </div>
+
+          <div className="bg-white px-8 py-8 rounded-md mb-6">
+            <p className="mb-5 text-base text-black">Product Sizes</p>
+            <div className="grid grid-cols-1 sm:grid-cols-1 gap-3 mb-5">
+              <Sizes sizes={sizes} setSizes={setSizes} />
             </div>
           </div>
         </div>

@@ -25,8 +25,15 @@ export interface IProduct {
   unit: string;
   quantity: number;
   colors: string[];
+  sizes?: string[];
+  selectedColor?: string;
+  selectedSize?: string;
   type?: string;
   itemInfo?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  metaKeywords?: string[];
+  slug?: string;
   status: string;
 }
 
@@ -59,7 +66,12 @@ export interface IAddProduct {
   unit: string;
   quantity: number;
   colors: string[];
+  sizes?: string[];
   type?: string;
   itemInfo?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  metaKeywords?: string[];
+  slug?: string;
   status?: string;
 }

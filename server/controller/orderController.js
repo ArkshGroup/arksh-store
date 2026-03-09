@@ -24,6 +24,22 @@ module.exports.paymentIntent = async (req, res) => {
 module.exports.addOrder = async (req, res) => {
   try {
     const orderItems = req.body;
+
+    // server-side one-time-per-user coupon enforcement
+    if (orderItems.couponCode) {
+      const existing = await Order.findOne({
+        user: orderItems.user,
+        couponCode: orderItems.couponCode,
+      }).lean();
+
+      if (existing) {
+        return res.status(400).send({
+          success: false,
+          message: "You have already used this coupon on a previous order.",
+        });
+      }
+    }
+
     const newOrders = new Order(orderItems);
     const order = await newOrders.save();
 

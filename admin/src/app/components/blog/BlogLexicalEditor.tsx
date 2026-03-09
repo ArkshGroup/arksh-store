@@ -8,8 +8,9 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
-import { HeadingNode, QuoteNode, registerRichText } from "@lexical/rich-text";
+import { HeadingNode, QuoteNode, registerRichText, $createHeadingNode } from "@lexical/rich-text";
 import { ListNode, ListItemNode, registerList } from "@lexical/list";
+import { $setBlocksType } from "@lexical/selection";
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
 import {
   $getSelection,
@@ -18,7 +19,6 @@ import {
   $createParagraphNode,
   FORMAT_TEXT_COMMAND,
   $isRangeSelection,
-  $createHeadingNode,
 } from "lexical";
 import { INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND } from "@lexical/list";
 
@@ -113,11 +113,7 @@ function ToolbarPlugin() {
     editor.update(() => {
       const selection = $getSelection();
       if (!$isRangeSelection(selection)) return;
-      const anchorNode = selection.anchor.getNode();
-      const element = anchorNode.getTopLevelElementOrThrow();
-      const heading = $createHeadingNode(tag);
-      element.replace(heading);
-      heading.select();
+      $setBlocksType(selection, () => $createHeadingNode(tag));
     });
   };
 
@@ -125,11 +121,7 @@ function ToolbarPlugin() {
     editor.update(() => {
       const selection = $getSelection();
       if (!$isRangeSelection(selection)) return;
-      const anchorNode = selection.anchor.getNode();
-      const element = anchorNode.getTopLevelElementOrThrow();
-      const paragraph = $createParagraphNode();
-      element.replace(paragraph);
-      paragraph.select();
+      $setBlocksType(selection, () => $createParagraphNode());
     });
   };
 
@@ -207,6 +199,7 @@ export default function BlogLexicalEditor({
             <ContentEditable
               className="min-h-[240px] w-full resize-y p-4 text-base outline-none prose prose-sm max-w-none"
               aria-placeholder={placeholder}
+              placeholder={undefined as any}
             />
           }
           placeholder={

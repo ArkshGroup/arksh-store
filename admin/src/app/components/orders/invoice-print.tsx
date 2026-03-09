@@ -96,7 +96,7 @@ const InvoicePrint = ({ orderData }: IPropType) => {
                   </tr>
                   <tr className="bg-white border-b border-gray6 last:border-0 text-start mx-9">
                     <td className="pr-3 py-3 font-normal text-[#55585B] text-start">
-                      Discount
+                      Coupon Discount
                     </td>
                     <td className="px-3 py-3 font-normal text-[#55585B] text-end">
                       Rs. {discount.toFixed(2)}

@@ -40,7 +40,7 @@ const orderSchema = new mongoose.Schema(
     },
     zipCode: {
       type: String,
-      required: true,
+      required: false,
     },
     subTotal: {
       type: Number,
@@ -54,6 +54,10 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       required: true,
       default: 0,
+    },
+    couponCode: {
+      type: String,
+      required: false,
     },
     totalAmount: {
       type: Number,

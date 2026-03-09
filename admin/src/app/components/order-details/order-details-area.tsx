@@ -29,8 +29,17 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
       "Item Price",
       "Amount",
     ];
+
+    const getUnitPrice = (item: any) => {
+      const base = item?.originalPrice ?? item?.price ?? 0;
+      if (item?.discount && item.discount > 0) {
+        return base - (base * item.discount) / 100;
+      }
+      return base;
+    };
+
     const total = orderData.cart.reduce(
-      (acc, curr) => acc + (curr.price ?? 0) * (curr.orderQuantity ?? 1),
+      (acc, curr) => acc + getUnitPrice(curr) * (curr.orderQuantity ?? 1),
       0
     );
     const grand_total =
@@ -124,15 +133,50 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                           </td>
                           <td className="bg-white border-b border-gray6 px-3 pl-0 py-3 text-start">
                             {item.title}
+                            {((item as any).selectedColor || (item as any).selectedSize) && (
+                              <div className="text-xs text-gray-500 mt-1">
+                                {(item as any).selectedColor && (
+                                  <span>Color: {(item as any).selectedColor}</span>
+                                )}
+                                {(item as any).selectedColor &&
+                                  (item as any).selectedSize && (
+                                  <span> | </span>
+                                )}
+                                {(item as any).selectedSize && (
+                                  <span>Size: {(item as any).selectedSize}</span>
+                                )}
+                              </div>
+                            )}
                           </td>
                           <td className="bg-white border-b border-gray6 px-3 py-3 font-bold text-center">
                             {item.orderQuantity}
                           </td>
                           <td className="bg-white border-b border-gray6 px-3 py-3 font-bold text-center">
-                            Rs. {item.price.toFixed(2)}
+                            {item.discount && item.discount > 0 ? (
+                              <div className="space-y-1">
+                                <div className="text-xs line-through text-gray-400">
+                                  Rs.{" "}
+                                  {(item.originalPrice ?? item.price).toFixed(2)}
+                                </div>
+                                <div>
+                                  Rs. {getUnitPrice(item).toFixed(2)}{" "}
+                                  <span className="text-xs text-green-600">
+                                    (-{item.discount}%)
+                                  </span>
+                                </div>
+                              </div>
+                            ) : (
+                              <span>
+                                Rs.{" "}
+                                {(item.originalPrice ?? item.price).toFixed(2)}
+                              </span>
+                            )}
                           </td>
                           <td className="bg-white border-b border-gray6 px-3 py-3 text-right font-bold">
-                            Rs. {(item.price * item.orderQuantity).toFixed(2)}
+                            Rs.{" "}
+                            {(
+                              getUnitPrice(item) * item.orderQuantity
+                            ).toFixed(2)}
                           </td>
                         </tr>
                       ))}
@@ -161,7 +205,7 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                 </div>
                 <div className="mb-3 md:mb-0 lg:mb-0  flex flex-col sm:flex-wrap">
                   <span className="mb-1 font-bold font-heading text-base uppercase block">
-                    DISCOUNT
+                    COUPON DISCOUNT
                   </span>
                   <span className="text-base text-gray-500 font-semibold font-heading block">
                     Rs. {(orderData?.discount ?? 0).toFixed(2)}

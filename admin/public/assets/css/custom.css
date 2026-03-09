@@ -47,6 +47,17 @@
 .tp-checkbox label.text-tiny {
     font-size: 13px;
 }
+.text-xs{
+    font-size: 10px;
+    line-height: 1.2;
+    font-weight: 400;
+    color: #55585B;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    text-transform: none;
+    letter-spacing: normal;
+    text-align: left;
+}
 .tp-checkbox label::after {
     position: absolute;
     content: "";
