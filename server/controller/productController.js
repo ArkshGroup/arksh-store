@@ -86,10 +86,35 @@ module.exports.getDiscountProduct = async (req, res, next) => {
   }
 };
 
-// getDiscountProduct
+// get single product by id
 module.exports.getSingleProduct = async (req, res, next) => {
   try {
     const product = await Product.findOne({ _id: req.params.id });
+    res.json(product);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// get single product by slug (or fallback to id)
+module.exports.getProductBySlug = async (req, res, next) => {
+  try {
+    const identifier = req.params.slug;
+
+    // Try by slug first
+    let product = await Product.findOne({ slug: identifier });
+
+    // Fallback: if not found by slug, try treating it as an _id
+    if (!product) {
+      product = await Product.findById(identifier);
+    }
+
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
     res.json(product);
   } catch (err) {
     next(err);

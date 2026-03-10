@@ -25,7 +25,6 @@ const useCheckoutSubmit = () => {
   const { user } = useSelector((state) => state.auth);
   const { shipping_info } = useSelector((state) => state.order);
   const { total, setTotal } = useCartInfo();
-  const [couponInfo, setCouponInfo] = useState({});
   const [cartTotal, setCartTotal] = useState("");
   const [minimumAmount, setMinimumAmount] = useState(0);
   const [shippingCost, setShippingCost] = useState(0);
@@ -36,32 +35,7 @@ const useCheckoutSubmit = () => {
   const [cardError, setCardError] = useState("");
   const [clientSecret, setClientSecret] = useState("");
   
-  // simple per-user coupon usage tracking in localStorage (client-side only)
-  const getUsedCoupons = () => {
-    if (typeof window === "undefined") return {};
-    try {
-      const raw = localStorage.getItem("usedCoupons");
-      return raw ? JSON.parse(raw) : {};
-    } catch {
-      return {};
-    }
-  };
-
-  const hasUserUsedCoupon = (userId, code) => {
-    if (!userId || !code) return false;
-    const used = getUsedCoupons();
-    return Array.isArray(used[userId]) && used[userId].includes(code);
-  };
-
-  const markCouponUsed = (userId, code) => {
-    if (typeof window === "undefined" || !userId || !code) return;
-    const used = getUsedCoupons();
-    const list = Array.isArray(used[userId]) ? used[userId] : [];
-    if (!list.includes(code)) {
-      used[userId] = [...list, code];
-      localStorage.setItem("usedCoupons", JSON.stringify(used));
-    }
-  };
+  // no localStorage-based coupon persistence; each checkout requires entering code again
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -83,7 +57,8 @@ const useCheckoutSubmit = () => {
   useEffect(() => {
     if (minimumAmount - discountAmount > total || cart_products.length === 0) {
       setDiscountPercentage(0);
-      localStorage.removeItem("couponInfo");
+      setDiscountProductType("");
+      setMinimumAmount(0);
     }
   }, [minimumAmount, total, discountAmount, cart_products]);
 
@@ -109,10 +84,18 @@ const useCheckoutSubmit = () => {
     const discountProductTotal =
       result && result.length > 0
         ? result.reduce(
-            (preValue, currentValue) =>
-              preValue +
-              Number(currentValue.originalPrice || 0) *
-                Number(currentValue.orderQuantity || 0),
+            (preValue, currentValue) => {
+              const original = Number(currentValue.originalPrice || 0);
+              const productDiscount = Number(currentValue.discount || 0);
+              const effectiveUnitPrice =
+                productDiscount && productDiscount > 0
+                  ? original - (original * productDiscount) / 100
+                  : original;
+              return (
+                preValue +
+                effectiveUnitPrice * Number(currentValue.orderQuantity || 0)
+              );
+            },
             0
           )
         : 0;
@@ -160,7 +143,6 @@ const useCheckoutSubmit = () => {
     }
 
     const code = couponRef.current?.value;
-    const userId = user?._id;
     if (isLoading) {
       return <Loader loading={isLoading} />;
     }
@@ -208,12 +190,6 @@ const useCheckoutSubmit = () => {
         return;
       }
 
-      // now enforce one-time use per user for applicable coupons
-      if (userId && hasUserUsedCoupon(userId, code)) {
-        notifyError("You have already used this coupon on a previous order.");
-        return;
-      }
-
       notifySuccess(
         `Your Coupon ${result[0].title} is Applied on ${result[0].productType}!`
       );
@@ -221,11 +197,6 @@ const useCheckoutSubmit = () => {
       setDiscountProductType(result[0].productType);
       setDiscountPercentage(result[0].discountPercentage);
       dispatch(set_coupon(result[0]));
-      localStorage.setItem("couponInfo", JSON.stringify(result[0]));
-
-      if (userId && code) {
-        markCouponUsed(userId, code);
-      }
     }
   };
 

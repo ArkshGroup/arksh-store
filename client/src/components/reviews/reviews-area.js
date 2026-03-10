@@ -93,7 +93,7 @@ const ReviewsArea = () => {
                           <td>
                             {r.product ? (
                               <Link
-                                href={`/product-details/${r.product._id}`}
+                                href={`/product/${r.product.slug || r.product._id}`}
                                 className="d-flex align-items-center gap-2"
                               >
                                 {r.product.image && (

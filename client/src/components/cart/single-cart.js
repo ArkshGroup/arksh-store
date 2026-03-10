@@ -16,6 +16,7 @@ const SingleCartItem = ({item}) => {
     discount = 0,
     selectedColor,
     selectedSize,
+    slug,
   } = item || {};
   const dispatch = useDispatch()
 
@@ -39,12 +40,12 @@ const SingleCartItem = ({item}) => {
   return (
     <tr>
       <td className="product-thumbnail">
-        <Link href={`product-details/${_id}`}>
+        <Link href={`/product/${slug || _id}`}>
           <Image src={image} alt="cart img" width={125} height={125} />
         </Link>
       </td>
       <td className="product-name">
-        <Link href={`product-details/${_id}`}>{title}</Link>
+        <Link href={`/product/${slug || _id}`}>{title}</Link>
         {(selectedColor || selectedSize) && (
           <div className="cart-item-meta text-xs text-gray-500 mt-1">
             {selectedColor && <span >Color: {selectedColor}</span>}

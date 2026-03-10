@@ -35,76 +35,85 @@ export default function BlogDetailsArea({ slug }) {
   }
 
   if (!isLoading && !isError && blog) {
+    const breadcrumbTitle =
+      typeof slug === "string" ? slug.replace(/-/g, " ") : blog.title;
     content = (
       <>
-        <BlogBreadcrumb title={blog.title} />
-        <section className="blog__details-area pt-50 pb-100">
+        <BlogBreadcrumb title={breadcrumbTitle} />
+        <section className="pt-50 pb-100" style={{ backgroundColor: "#f5f7fb" }}>
           <div className="container">
             <div className="row justify-content-center">
-              <div className="col-xxl-8 col-xl-8 col-lg-10">
-                <article className="blog__details-content">
-                  <header className="mb-30">
-                    <h1 className="blog__details-title mb-20">{blog.title}</h1>
-                    <div className="blog__meta text-muted mb-20">
-                      {blog.publishedAt && (
-                        <span>{formatDate(blog.publishedAt)}</span>
-                      )}
-                      {blog.authorName && (
-                        <>
-                          <span className="mx-2">·</span>
-                          <span>By {blog.authorName}</span>
-                        </>
-                      )}
-                      {blog.category && (
-                        <>
-                          <span className="mx-2">·</span>
-                          <span>{blog.category}</span>
-                        </>
-                      )}
+              <div className="col-xxl-12 col-xl-12">
+                <article className="bg-white rounded-3 shadow-sm overflow-hidden">
+                  {/* hero image */}
+                  {blog.featuredImage && (
+                    <div className="position-relative overflow-hidden">
+                      <Image
+                        src={blog.featuredImage}
+                        alt={blog.title}
+                        width={1200}
+                        height={520}
+                        className="w-100"
+                        style={{ objectFit: "contain" }}
+                      />
                     </div>
-                    {blog.featuredImage && (
-                      <div className="blog__details-thumb overflow-hidden rounded mb-30">
-                        <Image
-                          src={blog.featuredImage}
-                          alt={blog.title}
-                          width={800}
-                          height={450}
-                          className="w-100"
-                          style={{ objectFit: "cover" }}
-                        />
+                  )}
+
+                  <div className="p-4 p-md-5">
+                    <header className="mb-4">
+                      <div className="d-flex flex-wrap align-items-center text-muted mb-2 gap-2">
+                        {blog.category && (
+                          <span className="badge bg-primary-subtle text-primary text-uppercase fw-semibold">
+                            {blog.category}
+                          </span>
+                        )}
+                        {blog.publishedAt && (
+                          <span>{formatDate(blog.publishedAt)}</span>
+                        )}
+                        {blog.authorName && (
+                          <>
+                            <span className="mx-1">·</span>
+                            <span>By {blog.authorName}</span>
+                          </>
+                        )}
+                      </div>
+                      <h1 className="h2 mb-2">{blog.title}</h1>
+                      {blog.excerpt && (
+                        <p className="text-muted mb-0">
+                          {blog.excerpt}
+                        </p>
+                      )}
+                    </header>
+
+                    <div
+                      className="prose blog__body"
+                      dangerouslySetInnerHTML={{ __html: blog.content || "" }}
+                      style={{
+                        maxWidth: "100%",
+                        lineHeight: 1.8,
+                        fontSize: "16px",
+                      }}
+                    />
+
+                    {blog.tags && blog.tags.length > 0 && (
+                      <div className="d-flex flex-wrap align-items-center gap-2 mt-4 pt-3 border-top">
+                        <span className="text-muted small">Tags:</span>
+                        {blog.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="badge bg-light text-dark"
+                          >
+                            {tag}
+                          </span>
+                        ))}
                       </div>
                     )}
-                  </header>
-                  {blog.excerpt && (
-                    <p className="blog__excerpt text-muted lead mb-30">
-                      {blog.excerpt}
-                    </p>
-                  )}
-                  <div
-                    className="blog__body prose"
-                    dangerouslySetInnerHTML={{ __html: blog.content || "" }}
-                    style={{
-                      maxWidth: "100%",
-                      lineHeight: 1.7,
-                    }}
-                  />
-                  {blog.tags && blog.tags.length > 0 && (
-                    <div className="blog__tags mt-40 pt-30 border-top">
-                      <span className="me-2 text-muted">Tags:</span>
-                      {blog.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="badge bg-light text-dark me-1 mb-1"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+
+                    <div className="mt-4">
+                      <Link href="/blog" className="tp-btn-border tp-btn-border-2">
+                        ← Back to Blog
+                      </Link>
                     </div>
-                  )}
-                  <div className="mt-40">
-                    <Link href="/blog" className="tp-btn-border tp-btn-border-2">
-                      ← Back to Blog
-                    </Link>
                   </div>
                 </article>
               </div>

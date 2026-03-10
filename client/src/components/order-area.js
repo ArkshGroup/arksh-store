@@ -40,6 +40,7 @@ const SingleOrderArea = ({ orderId }) => {
       cardInfo,
       shippingCost,
       discount,
+      subTotal,
       totalAmount,
     } = order.order;
     console.log("order.order", order.order);
@@ -61,7 +62,23 @@ const SingleOrderArea = ({ orderId }) => {
           </div>
 
           {/* invoice area start */}
-          <InvoiceArea innerRef={contentRef} info={{name,country,city,contact,invoice,createdAt,cart,cardInfo,shippingCost,discount,totalAmount}} />
+          <InvoiceArea
+            innerRef={contentRef}
+            info={{
+              name,
+              country,
+              city,
+              contact,
+              invoice,
+              createdAt,
+              cart,
+              cardInfo,
+              shippingCost,
+              discount,
+              subTotal,
+              totalAmount,
+            }}
+          />
           {/* invoice area end */}
 
           {/* invoice print  */}

@@ -1,40 +1,25 @@
 
-import ShopDetailsMainArea from "@components/product-details/product-details-area-main";
+import { permanentRedirect } from "next/navigation";
 
-export async function generateMetadata({ params }) {
+export async function GET() {
+  permanentRedirect("/");
+}
+
+const ProductDetailsPage = async ({ params }) => {
   const { id } = await params;
+
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products/${id}`,
       { cache: "no-store" }
     );
     const product = res.ok ? await res.json() : null;
+    const slugOrId = product?.slug || id;
 
-    const title =
-      product?.metaTitle ||
-      (product?.title ? `${product.title} - Arksh Store` : "Product Details - Arksh Store");
-
-    const description =
-      product?.metaDescription ||
-      (product?.description
-        ? String(product.description).replace(/<[^>]*>/g, "").slice(0, 160)
-        : "View product details on Arksh Store.");
-
-    return {
-      title,
-      description,
-    };
+    permanentRedirect(`/product/${slugOrId}`);
   } catch {
-    return {
-      title: "Product Details - Arksh Store",
-      description: "View product details on Arksh Store.",
-    };
+    permanentRedirect(`/product/${id}`);
   }
-}
-
-const ProductDetailsPage = async ({ params }) => {
-  const { id } = await params;
-  return <ShopDetailsMainArea id={id} />;
 };
 
 export default ProductDetailsPage;

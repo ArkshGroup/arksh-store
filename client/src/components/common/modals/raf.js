@@ -28,6 +28,7 @@ const ProductModal = ({ product, list_modal = false }) => {
     discount,
     originalPrice,
     sku,
+    slug,
   } = product || {};
 
   const [activeImg, setActiveImg] = useState(image);
@@ -147,7 +148,7 @@ const ProductModal = ({ product, list_modal = false }) => {
                         Add To Wishlist
                       </span>
                     </button>
-                    <Link href={`/product-details/${_id}`}>
+                    <Link href={`/product/${slug || _id}`}>
                       <button type="button" className="product-action-btn">
                         <i className="fa-solid fa-link"></i>
                         <span className="product-action-tooltip">

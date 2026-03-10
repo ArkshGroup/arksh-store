@@ -5,6 +5,7 @@ const {
   getShowingProducts,
   getDiscountProduct,
   getSingleProduct,
+  getProductBySlug,
   getRelatedProducts,
   getAllProducts,
   deleteProduct,
@@ -22,6 +23,8 @@ router.post("/add-all", addAllProducts);
 router.get("/all", getAllProducts);
 // get showing products
 router.get("/show", getShowingProducts);
+// get single product by slug
+router.get("/slug/:slug", getProductBySlug);
 // get discount products
 router.get("/discount", getDiscountProduct);
 router.get("/relatedProduct", getRelatedProducts);

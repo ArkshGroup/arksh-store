@@ -18,7 +18,7 @@ import { handleModalShow } from "src/redux/features/productSlice";
 const ProductModal = () => {
   const { product, isShow } = useSelector((state) => state.product);
   const { wishlist } = useSelector((state) => state.wishlist);
-  const { _id, image, relatedImages, title, tags, SKU, price, discount, originalPrice, sku, colors, sizes } = product || {};
+  const { _id, image, relatedImages, title, tags, SKU, price, discount, originalPrice, sku, colors, sizes, slug } = product || {};
   const [activeImg, setActiveImg] = useState(image);
   const dispatch = useDispatch();
   const isWishlistAdded = wishlist.some((item) => item._id === _id);
@@ -144,7 +144,7 @@ const ProductModal = () => {
                     Add To Wishlist
                   </span>
                 </button>
-                <Link href={`/product-details/${_id}`}>
+                <Link href={`/product/${slug || _id}`}>
                   <button type="button" className="product-action-btn">
                     <i className="fa-solid fa-link"></i>
                     <span className="product-action-tooltip">

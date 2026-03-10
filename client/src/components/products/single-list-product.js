@@ -9,7 +9,7 @@ import { initialOrderQuantity } from "src/redux/features/cartSlice";
 import { setProduct } from "src/redux/features/productSlice";
 
 const SingleListProduct = ({ product }) => {
-  const { _id, image, title, price, discount } = product || {};
+  const { _id, image, title, price, discount, slug } = product || {};
   // handle dispatch
   const dispatch = useDispatch();
 
@@ -25,7 +25,7 @@ const SingleListProduct = ({ product }) => {
         <div className="row">
           <div className="col-xl-5 col-lg-5">
             <div className="product__thumb product__list-thumb p-relative fix m-img">
-              <Link href={`product-details/${_id}`}>
+              <Link href={`/product/${slug || _id}`}>
                 <Image
                   src={image}
                   alt="image"
@@ -56,7 +56,7 @@ const SingleListProduct = ({ product }) => {
               </div>
 
               <h3 className="product__list-title">
-                <Link href={`product-details/${_id}`}>{title}</Link>
+                <Link href={`/product/${slug || _id}`}>{title}</Link>
               </h3>
               <div className="product__list-price">
                 <span className="product__list-ammount">Rs. {price}</span>
@@ -89,7 +89,7 @@ const SingleListProduct = ({ product }) => {
                   <span className="product-action-tooltip">Quick view</span>
                 </button>
 
-                <Link href={`/product-details/${_id}`}>
+                <Link href={`/product/${slug || _id}`}>
                   <button
                     type="button"
                     className="product-action-btn product-action-btn-2"

@@ -1,5 +1,5 @@
 "use client";
-import { ToastContainer } from "react-toastify";
+import { Toaster } from "sonner";
 import { store } from "./store";
 import { Provider } from "react-redux";
 import AuthCom from "@/app/components/auth/auth-com";
@@ -9,7 +9,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <>
       <Provider store={store}>
         <AuthCom>{children}</AuthCom>
-        <ToastContainer />
+        <Toaster position="top-center" richColors closeButton />
       </Provider>
     </>
   );

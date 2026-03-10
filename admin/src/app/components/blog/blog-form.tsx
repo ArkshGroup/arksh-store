@@ -6,7 +6,7 @@ import { UseFormRegister, FieldErrors, Control, Controller } from "react-hook-fo
 import GlobalImgUpload from "../category/global-img-upload";
 import CouponFormField from "../brand/form-field-two";
 
-const BlogLexicalEditor = dynamic(() => import("./BlogLexicalEditor"), { ssr: false });
+const RichTextEditor = dynamic(() => import("./RichTextEditor"), { ssr: false });
 
 type BlogFormProps = {
   register: UseFormRegister<any>;
@@ -71,7 +71,7 @@ const BlogForm = ({
             name="content"
             control={control}
             render={({ field }) => (
-              <BlogLexicalEditor
+              <RichTextEditor
                 value={field.value ?? ""}
                 onChange={field.onChange}
                 placeholder="Write your blog content…"

@@ -4,8 +4,28 @@ import dayjs from "dayjs";
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 
-export default function InvoiceArea({innerRef,info}) {
-    const { name, country, city, contact, invoice, createdAt, cart, cardInfo, shippingCost, discount,totalAmount } = info || {};
+export default function InvoiceArea({ innerRef, info }) {
+  const {
+    name,
+    country,
+    city,
+    contact,
+    invoice,
+    createdAt,
+    cart,
+    cardInfo,
+    shippingCost,
+    discount,
+    subTotal,
+    totalAmount,
+  } = info || {};
+
+  // Derive coupon discount defensively from order fields:
+  // (subTotal + shipping) - totalAmount should equal the total discount applied (coupon)
+  const derivedCouponDiscount =
+    typeof subTotal === "number" && typeof shippingCost === "number"
+      ? Number((subTotal + shippingCost - totalAmount).toFixed(2))
+      : Number((discount || 0).toFixed(2));
   return (
     <div ref={innerRef} className="invoice__wrapper grey-bg-15 pt-40 pb-40 pl-40 pr-40 tp-invoice-print-wrapper">
       {/* <!-- invoice header --> */}
@@ -125,7 +145,7 @@ export default function InvoiceArea({innerRef,info}) {
           <div className="col-lg-3 col-md-4">
             <div className="invoice__discount-cost mb-30">
               <h5 className="mb-0">Coupon Discount</h5>
-              <p className="tp-font-medium">Rs. {discount.toFixed(2)}</p>
+              <p className="tp-font-medium">Rs. {derivedCouponDiscount.toFixed(2)}</p>
             </div>
           </div>
           <div className="col-lg-3 col-md-4">

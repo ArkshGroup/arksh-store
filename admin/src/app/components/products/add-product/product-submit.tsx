@@ -15,7 +15,7 @@ import Colors from "./colors";
 import Sizes from "./sizes";
 
 const BlogLexicalEditor = dynamic(
-  () => import("@/app/components/blog/BlogLexicalEditor"),
+  () => import("@/app/components/blog/RichTextEditor"),
   { ssr: false }
 );
 

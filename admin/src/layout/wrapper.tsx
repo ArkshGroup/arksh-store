@@ -1,8 +1,7 @@
 "use client";
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "./sidebar";
 import Header from "./header";
-import { ToastContainer } from "react-toastify";
 import Cookies from "js-cookie";
 import { redirect } from "next/navigation";
 
@@ -24,7 +23,6 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
 
         {children}
       </div>
-      <ToastContainer />
     </div>
   );
 };

@@ -15,7 +15,7 @@ import Sizes from "../add-product/sizes";
 import ProductCategory from "../../category/product-category";
 
 const BlogLexicalEditor = dynamic(
-  () => import("@/app/components/blog/BlogLexicalEditor"),
+  () => import("@/app/components/blog/RichTextEditor"),
   { ssr: false }
 );
 

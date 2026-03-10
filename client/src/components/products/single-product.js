@@ -14,7 +14,7 @@ import { add_to_wishlist } from "src/redux/features/wishlist-slice";
 import { setProduct } from "src/redux/features/productSlice";
 
 const SingleProduct = ({ product, discountPrd = false }) => {
-  const { _id, image, title, price, discount, originalPrice } = product || {};
+  const { _id, image, title, price, discount, originalPrice, slug } = product || {};
   const dispatch = useDispatch();
   const { cart_products } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -36,7 +36,7 @@ const SingleProduct = ({ product, discountPrd = false }) => {
     <React.Fragment>
       <div className="product__item p-relative transition-3 mb-50">
         <div className="product__thumb w-img p-relative fix">
-          <Link href={`/product-details/${_id}`}>
+          <Link href={`/product/${slug || _id}`}>
             <Image
               src={image}
               alt="product image"
@@ -80,7 +80,7 @@ const SingleProduct = ({ product, discountPrd = false }) => {
               <Eye />
               <span className="product-action-tooltip">Quick view</span>
             </button>
-            <Link href={`/product-details/${_id}`}>
+            <Link href={`/product/${slug || _id}`}>
             <button type="button" className="product-action-btn">
                <i className="fa-solid fa-link"></i>
               <span className="product-action-tooltip">Product Details</span>
@@ -99,7 +99,7 @@ const SingleProduct = ({ product, discountPrd = false }) => {
               </Link>
             ) : (
               <Link
-                href={`/product-details/${_id}`}
+                href={`/product/${slug || _id}`}
                 className="product-add-cart-btn w-100 d-flex align-items-center justify-content-center"
               >
                 <CartTwo />
@@ -110,7 +110,7 @@ const SingleProduct = ({ product, discountPrd = false }) => {
         </div>
         <div className="product__content">
           <h3 className="product__title">
-            <Link href={`/product-details/${_id}`}>{title}</Link>
+            <Link href={`/product/${slug || _id}`}>{title}</Link>
           </h3>
           {discount <= 0 && (
             <div className="product__price">

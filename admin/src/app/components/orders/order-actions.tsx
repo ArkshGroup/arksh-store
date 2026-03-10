@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import React, { useState, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
@@ -6,25 +7,27 @@ import { Invoice, View } from "@/svg";
 import { notifyError } from "@/utils/toast";
 import InvoicePrint from "./invoice-print";
 
-const OrderActions = ({ id,cls }: { id: string,cls?:string }) => {
+const OrderActions = ({ id, cls }: { id: string; cls?: string }) => {
   const [showInvoice, setShowInvoice] = useState<boolean>(false);
   const [showView, setShowView] = useState<boolean>(false);
   const printRefTwo = useRef<HTMLDivElement | null>(null);
   const { data: orderData, isLoading, isError } = useGetSingleOrderQuery(id);
 
   const handlePrint = useReactToPrint({
-    content: () => printRefTwo?.current,
+    contentRef: printRefTwo,
     documentTitle: "Receipt",
   });
 
-  const handlePrintReceipt = async () => {
-    try {
-      handlePrint();
-    } catch (err) {
-      console.log("order by user id error", err);
-      notifyError("Failed to print");
+  const handlePrintReceipt = () => {
+    if (isLoading || isError || !orderData) {
+      notifyError("Invoice data is not ready to print yet.");
+      return;
     }
-    // console.log('id', id);
+    if (!printRefTwo.current) {
+      notifyError("Invoice is not ready to print yet.");
+      return;
+    }
+    handlePrint();
   };
 
   return (
@@ -37,7 +40,7 @@ const OrderActions = ({ id,cls }: { id: string,cls?:string }) => {
         )}
       </td>
 
-      <td className={`${cls?cls:'px-9 py-3 text-end'}`}>
+      <td className={`${cls ? cls : "px-9 py-3 text-end"}`}>
         <div className="flex items-center justify-end space-x-2">
           <div className="relative">
             <button

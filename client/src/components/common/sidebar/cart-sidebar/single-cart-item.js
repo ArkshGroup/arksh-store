@@ -14,6 +14,7 @@ const SingleCartItem = ({ item }) => {
     discount,
     selectedColor,
     selectedSize,
+    slug,
   } = item || {};
   const dispatch = useDispatch();
 
@@ -25,14 +26,14 @@ const SingleCartItem = ({ item }) => {
     <div className="cartmini__widget-item">
       {image && (
         <div className="cartmini__thumb">
-          <Link href={`/product-details/${_id}`}>
+          <Link href={`/product/${slug || _id}`}>
             <Image src={image} alt="cart img" width={70} height={90} />
           </Link>
         </div>
       )}
       <div className="cartmini__content">
         <h5>
-          <a href={`/product-details/${_id}`}>{title}</a>
+          <a href={`/product/${slug || _id}`}>{title}</a>
         </h5>
         {(selectedColor || selectedSize) && (
           <div className="cartmini__meta text-xs text-gray-500 mb-1">

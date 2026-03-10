@@ -1,26 +1,11 @@
-import { toast } from 'react-toastify';
+import { toast } from "sonner";
 
-const notifySuccess = (message: string) =>
-  toast.success(message, {
-    position: 'top-center',
-    autoClose: 3000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  });
+const notifySuccess = (message: string) => {
+  toast.success(message);
+};
 
-const notifyError = (message: string) =>
-  toast.error(message, {
-    position: 'top-center',
-    autoClose: 3000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  });
+const notifyError = (message: string) => {
+  toast.error(message);
+};
 
 export { notifySuccess, notifyError };
-
